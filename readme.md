@@ -9,7 +9,7 @@ MEZW65C_RAM-Rev2.1（PCB Rev1.3)からの改良点<br>
 ２．CPLD(GAL)導入によるPCBの部品点数を削減<br>
 ３．ファームウェアによる6502、65816の自動判定<br>
 
-# １．CPUの高速化
+# １．CPUの高速化(10MHzでの動作）
 <br>
 Rev2.1(PCB Rev1.3)は、6502(8MHz)、65816(6MHz)で動作しています。<br>
 しかし、W65C02S6TPG-14とW65C816S6TPG-14を定格のは14MHzです。<br>
