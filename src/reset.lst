@@ -1,0 +1,92 @@
+  Tue Feb 18 2025 22:10                                                                                                    Page 1
+
+
+                                               ***************************************
+                                               **      WDC 65C816 Macro Assembler   **
+                                               **                                   **
+                                               **     Version 3.49.1- Feb  6 2006    **
+                                               ***************************************
+
+     1                        ;===============================================================================
+     2                        ; Reset CPU for the MEZW65C_RAM add-on board
+     3                        ;
+     4                        ;    Target: MEZW65C_RAM
+     5                        ;    Written by Akihito Honda (Aki.h @akih_san)
+     6                        ;    https://twitter.com/akih_san
+     7                        ;    https://github.com/akih-san
+     8                        ;    Date. 2024.8.02
+     9                        ;
+    10                        ; Copyright (c) 2024 Akihito Honda
+    11                        ;
+    12                        ; Released under the MIT license
+    13                        ;
+    14                        ; Permission is hereby granted, free of charge, to any person obtaining a copy of this
+    15                        ; software and associated documentation files (the gSoftwareh), to deal in the Software
+    16                        ; without restriction, including without limitation the rights to use, copy, modify, merge,
+    17                        ; publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+    18                        ; to whom the Software is furnished to do so, subject to the following conditions:
+    19                        ;
+    20                        ; The above copyright notice and this permission notice shall be included in all copies or
+    21                        ; substantial portions of the Software.
+    22                        ; 
+    23                        ; THE SOFTWARE IS PROVIDED gAS ISh, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    24                        ; OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    25                        ; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    26                        ; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+    27                        ; BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+    28                        ; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+    29                        ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    30                        ; SOFTWARE.
+    31                        ;
+    32                        ;WDC816AS -L reset.asm
+    33                        ;
+    34                        ;
+    35                        ;===============================================================================
+    36                        
+    37                                        pw      132
+    38                                        inclist on
+    39                        
+    40                                        chip    65816
+    41                        
+    42                        	.code
+    43                        	ORG	$FFE7
+    44                        
+    45                        	longa	off
+    46                        	longi	off
+    47                        	
+    48                        RESET:
+    49 00:FFE7: A9 00        	lda	#$00
+    50 00:FFE9: A2 FF        	ldx	#$ff
+    51 00:FFEB: 9A           	txs			; set SP (W65C02 OPECODE)
+    52 00:FFEC: 1B           	tas			; set SP (W65C816 OPECODE)
+  Tue Feb 18 2025 22:10                                                                                                    Page 2
+
+
+    53 00:FFED: EA           	nop
+    54 00:FFEE: EA           	nop
+    55 00:FFEF: BA           	tsx			; SP -> X (W65C02 OPECODE)
+    56 00:FFF0: E8           	inx
+    57 00:FFF1: 8E F9 FF     	stx	cpu_type	; 0:W65C02 1:W65C816
+    58                        
+    59 00:FFF4: 18           	clc			; set native mode
+    60 00:FFF5: FB           	xce			; if cpu=W65C02 then xce = nop operation
+    61 00:FFF6: EA           	nop
+    62 00:FFF7: EA           	nop
+    63                        
+    64                        NMIBRK:
+    65                        IRQBRK:
+    66 00:FFF8: DB           	stp	; stop CPU
+    67                        
+    68 00:FFF9: FF           cpu_type:	db	$FF
+    69                        
+    70 00:FFFA: F8 FF        	FDB	NMIBRK		; NMI
+    71                        
+    72 00:FFFC: E7 FF        	FDB	RESET		; RESET
+    73                        
+    74 00:FFFE: F8 FF        	FDB	IRQBRK		; IRQ/BRK
+    75                        
+    76                        	END
+
+
+      Lines assembled: 76
+      Errors: 0
