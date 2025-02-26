@@ -1,0 +1,67 @@
+Name            MEZW65C_RAM;
+Partno          MEZW65C_GLUE;
+Revision        15;
+Date            02/17/2025;
+Designer        A. HONDA;
+Company         Hobby;
+Location        None;
+Assembly        None;
+Device          g22v10;
+/*
+ * Inputs
+ */
+
+/*PIN 1: FF clock to Bank Register Clock */
+PIN 2           = RW;           /* RA4 */
+PIN [3,4,5]     = [D0,D1,D2];   /* address Inputs RB0, RB1, RB2  */
+PIN 6           = clk;			/* RA3 */
+PIN 7           = DCK;          /* RA1 */
+PIN 8           = BE;           /* RA0 */
+PIN 9           = E;
+PIN 10          = SSX;           /* RE2 (SPI_SS) */
+PIN 11          = D_IN;         /* SD card MISO */
+PIN 13          = low;			/* input GND */
+/*
+ * Outputs
+ */
+
+PIN 14 = SO;                            /* RB2 : SD MISO output */
+Pin 15 = CEX;                           /* memory #CE */
+PIN 16 = WEX;                           /* memory #WE */
+PIN 17 = OEX;                           /* memory #OE */
+PIN 18 = nck;
+PIN [19,20,21] = [A16,A17,A18];         /* Register Outputs */
+PIN 22 = R_CK;
+PIN 23 = CPU_CK;
+
+field input  = [D0,D1,D2];      /* Inputs Field                 */
+field output = [A16,A17,A18];   /* Outputs Field                */
+
+/*
+ * Logic
+ */
+nck = !low & !clk;
+
+/* clock delay */
+CPU_CK = !low & !nck;
+
+/* make A16-A18 Latch clock */
+R_CK = (BE & CPU_CK) # (!BE & DCK);
+
+/* control memory select */
+OEX = !RW # (!R_CK & !E);
+/*OEX = !RW # !R_CK;*/
+
+/* control memory #WE */
+WEX = RW # (BE & !CPU_CK);
+
+/* control memory #CE */
+CEX = !SSX;
+
+/* control MISO */
+SO = D_IN;
+SO.oe = !SSX;
+
+output.d = input;
+output.ar = E;
+output.sp = low; /* b'0 */

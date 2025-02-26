@@ -1,0 +1,23 @@
+<GAL22V10B-15LP>
+  SRAM HM678127UHJ-12
+  (SRAM AS6C1008ピン互換アダプタ Little Deamon1 Rev0.3) 使用
+
+  W65C02    14MHz   OK!!
+  W65C816   14MHz   NG....
+
+  SRAM AS6C4008
+  W65C02    10MHz   OK!!
+  W65C816   10MHz   OK
+
+
+<ATF22V10C-7PX>
+  SRAM HM678127UHJ-12
+  (SRAM AS6C1008ピン互換アダプタ Little Deamon1 Rev0.3) 使用
+  W65C02    14MHz   OK!!
+  W65C816   14MHz   OK!! (emulation mode NG....)
+
+  SRAM AS6C4008
+  W65C02    10MHz   OK!!
+  W65C816   10MHz   OK!!
+
+

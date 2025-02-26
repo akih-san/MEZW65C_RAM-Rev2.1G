@@ -1,0 +1,108 @@
+%SIGNAL
+PIN  19 =  A16 
+PIN  20 =  A17 
+PIN  21 =  A18 
+PIN   8 =  BE 
+PIN  15 =  CEX 
+PIN  23 =  CPU_CK 
+PIN   3 =  D0 
+PIN   4 =  D1 
+PIN   5 =  D2 
+PIN   7 =  DCK 
+PIN  11 =  D_IN 
+PIN   9 =  E 
+PIN  17 =  OEX 
+PIN   2 =  RW 
+PIN  22 =  R_CK 
+PIN  14 =  SO 
+PIN  10 =  SSX 
+PIN  16 =  WEX 
+PIN   6 =  clk 
+PIN  13 =  low 
+PIN  18 =  nck 
+%END
+
+%FIELD
+FIELD input = D0,D1,D2
+FIELD output = A16,A17,A18
+%END
+
+%EQUATION
+A16.d  =>
+    D0
+
+A16.ar A17.ar A18.ar  =>
+    E
+
+A16.sp A17.sp A18.sp  =>
+    low
+
+A17.d  =>
+    D1
+
+A17.ar  =>
+    
+A17.sp  =>
+    
+A18.d  =>
+    D2
+
+A18.ar  =>
+    
+A18.sp  =>
+    
+CEX =>
+    !SSX
+
+CPU_CK =>
+    !low & !nck
+
+OEX =>
+    !RW
+  # !E & !R_CK
+
+R_CK =>
+    BE & CPU_CK
+  # !BE & DCK
+
+SO =>
+    D_IN
+
+SO.oe  =>
+    !SSX
+
+WEX =>
+    RW
+  # BE & !CPU_CK
+
+nck =>
+    !clk & !low
+
+A16.oe  =>
+    1 
+
+A17.oe  =>
+    1 
+
+A18.oe  =>
+    1 
+
+CEX.oe  =>
+    1 
+
+CPU_CK.oe  =>
+    1 
+
+OEX.oe  =>
+    1 
+
+R_CK.oe  =>
+    1 
+
+WEX.oe  =>
+    1 
+
+nck.oe  =>
+    1 
+
+%END
