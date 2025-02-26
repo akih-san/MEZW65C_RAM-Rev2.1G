@@ -27,11 +27,11 @@ PCB Rev1.3には面積的にICを追加することは不可能な状況でし�
 14MHzで動かすには、もっと高速なSRAMが必要です。<br>
 X(旧Twitter)の@DragonBallEZさんが、MH678127UHJ-12の高速SRAMを<br>
 AS6C1008のピン配置に変換するアダプタ「Little Demon1 Rev0.3」を<br>
-
-[](photo/LittleDemon1.jpg)
-
 を作成しているので、 それを使って実験したところ、14MHzで動作することが<br>
 確認出来ました。<br>
+
+![](photo/LittleDemon1.jpg)<br>
+（Little Demon1 Rev0.3）
 <br>
 
 # ２．CPLD(GAL)導入によるPCBの部品点数を削減
