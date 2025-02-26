@@ -29,6 +29,7 @@ X(旧Twitter)の@DragonBallEZさんが、MH678127UHJ-12の高速SRAM
 
 
 <br>
+
 # ２．ＣＰＬＤ（ＧＡＬ）導入によるＰＣＢの部品点数を削減
 <br>
 Glue logicは、CPLDを使えば複数の標準ロジックICを、規模にもよりますが<br>
