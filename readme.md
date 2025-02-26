@@ -1,4 +1,3 @@
-
 # MEZW65C_RAM-Rev2.1G
 
 工事中( - Under construction - )
@@ -22,15 +21,16 @@ PCB Rev1.3には面積的にICを追加することは不可能な状況でし�
 <br>
 今回、CPLDを導入し、部品点数を減らしたPCBを作成することで、<br>
 6502、65816を共に10MHzで動作することが出来るようになります。<br>
-
+  
 <br>
-（余談）<br>
+＜余談＞<br>
 14MHzで動かすには、もっと高速なSRAMが必要です。<br>
-X(旧Twitter)の@DragonBallEZさんが、MH678127UHJ-12の高速SRAM<br>
-（以前は秋月電子通商さんで入手出来ましたが、販売終了で入手は困難です）<br>
-をAS6C1008のピン配置に変換するアダプタ
-[Little Demon1 Rev0.3](https://github.com/akih-san/MEZW65C_RAM-Rev2.1G/blob/main/photo/LittleDemon1.jpg)
-を作成しているので、それを使って実験したところ、14MHzで動作することが<br>
+X(旧Twitter)の@DragonBallEZさんが、MH678127UHJ-12の高速SRAMを<br>
+AS6C1008のピン配置に変換するアダプタ「Little Demon1 Rev0.3」を<br>
+
+[](photo/LittleDemon1.jpg)
+
+を作成しているので、 それを使って実験したところ、14MHzで動作することが<br>
 確認出来ました。<br>
 <br>
 
