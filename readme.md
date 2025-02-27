@@ -102,6 +102,31 @@ PICへの書き込みを行います。メザニンボードを装着しての�
 # μSDカードの作成
 [MEZW65C_RAM Rev2.1のDISKSディレクトリの中身全部](https://github.com/akih-san/MEZW65C_RAM-Rev2.1/tree/main/DISKS)のファイルをμSDカードにコピーします。<br>
 6502/65816を10MHzで動かすため、[コンフィグファイル](DISKS)を上書きします。<br>
+<br>
 
+# 参考
+＜EMUZ80＞<br>
+EUMZ80はZ80CPUとPIC18F47Q43のDIP40ピンIC2つで構成されるシンプルなコンピュータです。<br>
+（電脳伝説 - EMUZ80が完成）  <br>
+https://vintagechips.wordpress.com/2022/03/05/emuz80_reference  <br>
+<br>
+＜SuperMEZ80＞<br>
+SuperMEZ80は、EMUZ80にSRAMを追加しZ80をノーウェイトで動かすことができます。<br>
+https://github.com/satoshiokue/SuperMEZ80<br>
+<br>
+＜＠hanyazouさんのソース＞<br>
+https://github.com/hanyazou/SuperMEZ80/tree/mez80ram-cpm<br>
+<br>
+＜@electrelicさんのユニバーサルモニタ＞<br>
+https://electrelic.com/electrelic/node/1317<br>
 
+＜オレンジピコショップ＞  <br>
+オレンジピコさんでEMUZ80、その他メザニンボードの購入できます。<br>
+<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-051.html<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-061.html<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-062.html<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-079.html<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-087.html<br>
+https://store.shopping.yahoo.co.jp/orangepicoshop/pico-a-089.html<br>
 
