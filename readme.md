@@ -54,4 +54,14 @@ CPLDの導入と、ファームウェアによるCPUの自動判定により、P
 CPUの抜き差しをしやすいように、LEDの配置を変更しています。<br>
 部品点数が減ったため、SRAMやPLDの抜き差しも楽になりました。<br>
 
-# 
+# CPLDへのプログラミングと書き込み
+CPLDの開発環境は、マイクロチップ社がPLD Design Resourcesとして[WinCUPL](https://www.microchip.com/en-us/products/fpgas-and-plds/spld-cplds/pld-design-resources)を提供しています。<br>
+プログラミング自体は、慣れたテキストエディタを使えます。コンパイルとコード生成（jedファイル）<br>
+をWinCUPLで行います。<br>
+WinCUPLは少し古いソフトですが、Windows11でも動作しています。ただし、インストールすると<br>
+既存の環境変数を書き換えてしまうので、既存の環境変数をバックアップしておく必要があります。<br>
+そうしないと、既存のソフトウェアが立ち上がらなくなったりする不具合が発生するので、<br>
+注意が必要です。<br>
+CPLDのプログラミングについては[ここ](https://satoru8765.hatenablog.com/entry/2024/09/16/174243)が参考になると思います。<br>
+
+
