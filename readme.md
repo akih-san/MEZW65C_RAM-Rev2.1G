@@ -63,5 +63,15 @@ WinCUPLは少し古いソフトですが、Windows11でも動作しています�
 そうしないと、既存のソフトウェアが立ち上がらなくなったりする不具合が発生するので、<br>
 注意が必要です。<br>
 CPLDのプログラミングについては[ここ](https://satoru8765.hatenablog.com/entry/2024/09/16/174243)が参考になると思います。<br>
+<br>
+ - CPLDの書き込み
+   CPLDには、ROMライタを使用してjedファイルを書込みます。<br>
+   使用したのは、XGecu Programmer Model TL866Ⅱ PLUSです。<br>
+   少し古いですが、問題なく書き込みが出来ました。XGecu Official Siteは[こちら](https://xgecu.myshopify.com/)<br>
 
+   ![](photo/ROM_WRITER.JPG)<br>
+（今回使用したROMライタ）
+
+   
+   
 
