@@ -64,14 +64,41 @@ WinCUPLは少し古いソフトですが、Windows11でも動作しています�
 注意が必要です。<br>
 CPLDのプログラミングについては[ここ](https://satoru8765.hatenablog.com/entry/2024/09/16/174243)が参考になると思います。<br>
 <br>
- - CPLDの書き込み
-   CPLDには、ROMライタを使用してjedファイルを書込みます。<br>
+ - CPLDへの書き込み<br>
+
+   CPLDには、ROMライタを使用してMEZW65C_RAM.jedファイルを書込みます。<br>
    使用したのは、XGecu Programmer Model TL866Ⅱ PLUSです。<br>
    少し古いですが、問題なく書き込みが出来ました。XGecu Official Siteは[こちら](https://xgecu.myshopify.com/)<br>
 
    ![](photo/ROM_WRITER.JPG)<br>
 （今回使用したROMライタ）
 
-   
-   
+# PIC18F47Q43/Q84/Q83への書き込み
+PICへの書き込みツールを用いて、ヘキサファイルを書き込みます。<br>
+<br>
+- PIC18F47Q43 - R2.1GQ43.hex
+- PIC18F47Q84 - R2.1GQ84.hex
+- PIC18F47Q83 - R2.1GQ83.hex
+<br>
+＜注意点＞<br>
+EMUZ80ボードから、メザニンボード（MEZW65C_RAM Rev2.1G）を外した状態で<br>
+PICへの書き込みを行います。メザニンボードを装着しての書き込みは、失敗が<br>
+多いです。<br>
+もしくは、PICに書き込めるライターを使用します。<br>
+<br>
+
+- snap(マイクロチップ社の書き込みツール)<br><br>
+
+  - [snap](https://www.microchip.com/en-us/development-tool/PG164100)
+
+<br>
+- PICkit3（または互換ツール）<br><br>
+  PICkitminus書き込みソフトを用いて、書き込むことが出来ます。以下で入手できます。<br>
+
+  - [PICkitminus](http://kair.us/projects/pickitminus/)
+<br>
+
+
+# μSDカードの作成
+
 
