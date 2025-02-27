@@ -40,7 +40,7 @@ PCB Rev1.3には３つの標準ロジックICがあります。追加のGlue log
 ３つの標準ロジックICを、１つの22V10タイプのCPLDにまとめることが出来ました。<br>
 CPLDは、私自信にとって初めての挑戦でしたが、うまくいきました。<br>
 
-![](photo/CPLD_GAL.jpg)<br>
+![](photo/CPLD_GAL.JPG)<br>
 （今回使用したCPLDとGAL）
 <br>
 
