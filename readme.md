@@ -100,7 +100,7 @@ PICへの書き込みを行います。メザニンボードを装着しての�
 
 
 # μSDカードの作成
-[MEZW65C_RAM Rev2.1](https://github.com/akih-san/MEZW65C_RAM-Rev2.1/tree/main/DISKS)のファイルをμSDカードにコピーします。<br>
+[MEZW65C_RAM Rev2.1のDISKSディレクトリの中身全部](https://github.com/akih-san/MEZW65C_RAM-Rev2.1/tree/main/DISKS)のファイルをμSDカードにコピーします。<br>
 6502/65816を10MHzで動かすため、[コンフィグファイル](DISKS)を上書きします。<br>
 
 
