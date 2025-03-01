@@ -1,9 +1,10 @@
 # MEZW65C_RAM-Rev2.1G
 
-工事中( - Under construction - )
-
+![](photo/R1.6.JPG)<br>
+（MEZW65C_RAM Rev1.6メザニンボード）
 <br>
-MEZW65C_RAM-Rev2.1（PCB Rev1.3)からの改良点<br>
+
+## MEZW65C_RAM-Rev2.1（PCB Rev1.3)からの改良点<br>
 <br>
 １．CPUの高速化<br>
 ２．CPLD(GAL)導入によるPCBの部品点数を削減<br>
