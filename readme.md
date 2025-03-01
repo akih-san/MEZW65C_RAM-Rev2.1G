@@ -30,6 +30,7 @@ AS6C1008のピン配置に変換するアダプタ「Little Demon1 Rev0.3」を<
 
 を作成しているので、 それを使って実験したところ、[14MHzで動作](photo/opening14MHz.png)することが<br>
 確認出来ました。[ASCIIARTの結果](photo/asciiart.png)<br>
+（MH678127UHJ-12は秋月電子通商での販売が終了しており、入手困難です）<br>
 
 ![](photo/LittleDemon1.jpg)<br>
 （Little Demon1 Rev0.3）
