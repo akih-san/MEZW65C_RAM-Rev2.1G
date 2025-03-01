@@ -88,8 +88,7 @@ PICへの書き込みを行います。メザニンボードを装着しての�
 多いです。<br>
 もしくは、PICに書き込めるライターを使用します。<br>
 <br>
-
-- snap(マイクロチップ社の書き込みツール)<br><br>
+- snap(マイクロチップ社の書き込みツール)<br>
 
   - [snap](https://www.microchip.com/en-us/development-tool/PG164100)
 
@@ -100,12 +99,18 @@ PICへの書き込みを行います。メザニンボードを装着しての�
   - [PICkitminus](http://kair.us/projects/pickitminus/)
 <br>
 
-
 # μSDカードの作成
 [MEZW65C_RAM Rev2.1のDISKSディレクトリの中身全部](https://github.com/akih-san/MEZW65C_RAM-Rev2.1/tree/main/DISKS)のファイルをμSDカードにコピーします。<br>
 6502/65816を10MHzで動かすため、[コンフィグファイル](DISKS)を上書きします。<br>
 <br>
 
+# その他
+詳細については、<br>
+  - [MEZW65C_RAM Rev2.0](https://github.com/akih-san/MEZW65C_RAM-Rev2.0)<br>
+  - [MEZW65C_RAM Rev2.1](https://github.com/akih-san/MEZW65C_RAM-Rev2.1)<br>
+<br>
+を参照してください。<br>
+<br>
 # 参考
 ＜EMUZ80＞<br>
 EUMZ80はZ80CPUとPIC18F47Q43のDIP40ピンIC2つで構成されるシンプルなコンピュータです。<br>
