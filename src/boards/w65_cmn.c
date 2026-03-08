@@ -25,6 +25,8 @@ unsigned int rx_wp, rx_rp, rx_cnt;
 #define cpu_type 0xfff9
 
 const unsigned char rom[] = {
+	0x18,           //    clc              ; set native mode
+	0xFB,           //    xce              ; if cpu=W65C02 then xce = nop operation
 	0xA9,0x00,      //    lda  #$00
 	0xA2,0xFF,      //    ldx  #$ff
 	0x9A,           //    txs              ; set SP (W65C02 OPECODE)
@@ -34,8 +36,6 @@ const unsigned char rom[] = {
 	0xBA,           //    tsx              ; SP -> X (W65C02 OPECODE)
 	0xE8,           //    inx
 	0x8E,0xF9,0xFF, //    stx  cpu_type    ; 0:W65C02 1:W65C816
-	0x18,           //    clc              ; set native mode
-	0xFB,           //    xce              ; if cpu=W65C02 then xce = nop operation
 	0xCB,           //    wai              ; wait CPU
 // loop:
 	0x80, 0xFE,     //    bra  loop
@@ -204,7 +204,7 @@ void start_cpu(void) {
 							// active CPU BUS
 
 	LAT(W65_RESET) = 0;		// cpu reset
-    __delay_ms(1);
+    __delay_us(100);
 
 	LAT(W65_RESET) = 1;		// cpu release reset
 
@@ -234,12 +234,13 @@ uint8_t reset_cpu(void)
 		}
 
 		start_cpu();
-		__delay_ms(1000);
+		__delay_us(500);
 
 		CLCSELECT = 0;			// CLC1 select
 		G2POL = 0;				// /BE = 0 rising CLK edge
 								// CPU BUS Hi-z
 		bus_hold_req();
+		__delay_ms(1);
 		read_sram(cpu_type, &tmp_buf[0][0], 1);
 		switch (tmp_buf[0][0]) {
 			case 0:
@@ -247,7 +248,9 @@ uint8_t reset_cpu(void)
 			case 1:
 				return 1;		// CPU : W65C816
 		}
+		printf("Unknown CPU type(%02x)\r\n", tmp_buf[0][0]);
 		printf("RESET CPU...\r\n");
+		__delay_ms(500);
 	}
 }
 
@@ -316,7 +319,7 @@ void port_init(void)
 	// Data bus D7-D0 pin
 	WPU(W65_ADBUS) = 0xff;	// Week pull up
 	LAT(W65_ADBUS) = 0x00;	// PLD FF init
-	TRIS(W65_ADBUS) = 0xff;	// Set as input
+	TRIS(W65_ADBUS) = 0x00;	// Set as output
 	
 	// SPI data and clock pins slew at maximum rate
 
@@ -387,7 +390,6 @@ void write_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 	ab.w = addr;
 	i = 0;
 
-	TRIS(W65_ADBUS) = 0x00;		// Set as output
 	if (cpu_flg) {
 		// W65C816 native mode
 		while( i < len ) {
@@ -416,7 +418,6 @@ void write_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 			ab.w++;
 	    }
 	}
-	TRIS(W65_ADBUS) = 0xff;		// Set as input
 }
 
 void read_sram(uint32_t addr, uint8_t *buf, unsigned int len)
@@ -433,17 +434,18 @@ void read_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 			LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
 			LAT(W65_DCK) = 0;						// Set Bank register
-			TRIS(W65_ADBUS) = 0x00;					// Set as output
 		    LAT(W65_ADBUS) = ab.hl;
 			j = i++;
 			LAT(W65_DCK) = 1;
 			TRIS(W65_ADBUS) = 0xFF;					// Set as input
 			ab.w++;									// Ensure bus data setup time from HiZ to valid data
 			((uint8_t*)buf)[j] = PORT(W65_ADBUS);	// read data
+			TRIS(W65_ADBUS) = 0x00;					// Set as output
 	    }
 	}
 	else {
 		// W65C02 mode
+		TRIS(W65_ADBUS) = 0xff;		// Set as input
 		while( i < len ) {
 			LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
@@ -451,6 +453,7 @@ void read_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 			j = i++;
 			((uint8_t*)buf)[j] = PORT(W65_ADBUS);	// read data
 	    }
+		TRIS(W65_ADBUS) = 0x00;					// Set as output
 	}
 }
 

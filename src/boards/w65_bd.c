@@ -276,18 +276,21 @@ static void bus_hold_req(void) {
 	// Set address bus as output
 	TRIS(W65_ADR_L) = 0x00;	// A7-A0
 	TRIS(W65_ADR_H) = 0x00;	// A8-A15
+    LAT(W65_ADR_L) = 0x00;
+    LAT(W65_ADR_H) = 0x00;
+	// Set data bus as output
+	TRIS(W65_ADBUS) = 0x00;		// Set as output
+	LAT(W65_ADBUS) = 0x00;		// data 0
 
-	LAT(W65_RW) = 1;			// SRAM READ mode
 	TRIS(W65_RW) = 0;			// output
-//	TRIS(W65_DCK) = 0;		// Set as output
+	LAT(W65_RW) = 1;			// SRAM READ mode
 }
 
 static void bus_release_req(void) {
 	// Set address bus as input
-	TRIS(W65_ADR_L) = 0xff;	// A7-A0
-	TRIS(W65_ADR_H) = 0xff;	// A8-A15
-
-//	TRIS(W65_DCK) = 1;		// Set as input
+	TRIS(W65_ADR_L) = 0xff;		// A7-A0
+	TRIS(W65_ADR_H) = 0xff;		// A8-A15
+	TRIS(W65_ADBUS) = 0xff;		// Set as input
 	TRIS(W65_RW) = 1;			// input
 }
 
