@@ -202,10 +202,13 @@ void main(void)
 	raw_addr = 0;
 	load_flg = 0;
 	binv.sw = 0;
+	cpu_flg = 0;
 
-	port_init();
 	uart_init();
 	wait_for_programmer();
+
+	port_init();
+	setup_ivt();
 
 	setup_sd();
 	if (disk_init() < 0) while (1);
@@ -213,7 +216,7 @@ void main(void)
 	clk_init();		// initial CLK = 2MHz
 	clc_init();
 
-	reset_cpu();
+	cpu_flg = reset_cpu();
 
 	// memory test
 	mem_init();
@@ -225,11 +228,8 @@ void main(void)
 	else printf("CPU : W65C816\r\n");
 
 	reset_clk();
-	clc_init();
-
-	// Global interrupt enable
-	GIE = 1;
-	// command input
+	setup_tomer0();		//Start IRQ timer
+	enable_interrupt();
 
 	if ( setup_monitor() ) {
 		printf("System stop!!");
@@ -292,8 +292,7 @@ static int setup_monitor(void) {
 	//
 	// Start CPU
 	//
-	start_W65();
-	setup_tomer0();		//Start IRQ timer
+	start_cpu();
 	drive_cpu();
 	return 0;
 }

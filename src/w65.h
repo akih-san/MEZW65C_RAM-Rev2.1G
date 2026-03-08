@@ -312,13 +312,14 @@ extern unsigned int ax_wp, ax_rp, ax_cnt;
 extern void putax(char c);
 extern int getax(void);
 
-extern void reset_cpu(void);
+extern uint8_t reset_cpu(void);
 extern void port_init(void);
 extern void uart_init(void);
 extern void clc_init(void);
 extern void clk_init(void);
 extern void reset_clk(void);
-extern void start_W65(void);
+extern void setup_ivt(void);
+extern void enable_interrupt(void);
 extern void setup_sd(void);
 extern void wait_for_programmer(void);
 extern void setup_tomer0(void);
