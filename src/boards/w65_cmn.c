@@ -36,14 +36,14 @@ const unsigned char rom[] = {
 	0x8E,0xF9,0xFF, //    stx  cpu_type    ; 0:W65C02 1:W65C816
 	0x18,           //    clc              ; set native mode
 	0xFB,           //    xce              ; if cpu=W65C02 then xce = nop operation
-	0xEA,           //    nop
-	0xEA,           //    nop
-	0xDB,           //    stp              ; stop CPU
+	0xCB,           //    wai              ; wait CPU
+// loop:
+	0x80, 0xFE,     //    bra  loop
 // 0xfff9
 	0xFF,           //cpu_type:	db	$FF
-	0xF8,0xFF,      //    FDB  NMIBRK		; NMI
+	0xF6,0xFF,      //    FDB  NMIBRK		; NMI
 	0xE7,0xFF,      //    FDB  RESET		; RESET
-	0xF8,0xFF      //    FDB  IRQBRK		; IRQ/BRK
+	0xF6,0xFF       //    FDB  IRQBRK		; IRQ/BRK
 };
 
 // Make IRQ pulse
@@ -81,8 +81,17 @@ void setup_tomer0(void) {
 	MFOEN = 1;
 	TMR0H = 0xff;
 	TMR0L = 0x00;
-	TMR0IF =0;	// Clear timer0 interrupt flag
-	TMR0IE = 1;	// Enable timer0 interrupt
+//	TMR0IF =0;	// Clear timer0 interrupt flag
+//	TMR0IE = 1;	// Enable timer0 interrupt
+}
+
+void enable_interrupt(void) {
+
+	U3RXIE = 1;		// Receiver interrupt enable
+	TMR0IF =0;		// Clear timer0 interrupt flag
+	TMR0IE = 1	;	// Enable timer0 interrupt
+	// Global interrupt enable
+	GIE = 1;
 }
 //
 // define interrupt
@@ -187,14 +196,33 @@ unsigned int get_str(char *buf, uint8_t cnt) {
 	return c;
 }
 
-void reset_cpu(void)
+void start_cpu(void) {
+
+	bus_release_req();
+	CLCSELECT = 0;			// CLC1 select
+	G2POL = 1;				// /BE = 1 rising CLK edge
+							// active CPU BUS
+
+	LAT(W65_RESET) = 0;		// cpu reset
+    __delay_ms(1);
+
+	LAT(W65_RESET) = 1;		// cpu release reset
+
+	CLCSELECT = 7;			// CLC8 select
+	G3POL = 1;				//
+	G3POL = 0;				// reset CLC8OUT = 0; release CLC2 reset
+	irq_flg = 0;
+}
+
+uint8_t reset_cpu(void)
 {
 	int i;
 
-	// write cpu emulation mode operation program
+	CLCSELECT = 0;			// CLC1 select
+	G2POL = 0;				// /BE = 0 rising CLK edge
 	bus_hold_req();
-	cpu_flg = 0;
 
+	// write cpu emulation mode operation program
 	for (;;) {
 		write_sram(rom_org, (uint8_t *)rom, sizeof(rom));
 		read_sram(rom_org, &tmp_buf[0][0], sizeof(rom));
@@ -206,25 +234,18 @@ void reset_cpu(void)
 		}
 
 		start_cpu();
-
-	    __delay_ms(100);
+		__delay_ms(1000);
 
 		CLCSELECT = 0;			// CLC1 select
 		G2POL = 0;				// /BE = 0 rising CLK edge
-		LAT(W65_RESET) = 0;		// cpu reset
-
-	    __delay_ms(100);
-
+								// CPU BUS Hi-z
 		bus_hold_req();
-
 		read_sram(cpu_type, &tmp_buf[0][0], 1);
 		switch (tmp_buf[0][0]) {
 			case 0:
-				cpu_flg = 0;		// CPU : W65C02
-				return;
+				return 0;		// CPU : W65C02
 			case 1:
-				cpu_flg = 1;		// CPU : W65C816
-				return;
+				return 1;		// CPU : W65C816
 		}
 		printf("RESET CPU...\r\n");
 	}
@@ -246,14 +267,14 @@ void port_init(void)
 
 	// /BE output pin
 	WPU(W65_BE) = 0;		// disable pull up
-	LAT(W65_BE) = 0;		// BUS Hi-z
+	LAT(W65_BE) = 0;		// CPU BUS Hi-z
 	TRIS(W65_BE) = 0;		// Set as output
 	
-    // /RESET output pin
-	WPU(W65_RESET) = 0;	// disable pull up
-	LAT(W65_RESET) = 0;	// Reset
+	// /RESET output pin
+	WPU(W65_RESET) = 0;		// disable pull up
+	LAT(W65_RESET) = 0;		// Reset
 	TRIS(W65_RESET) = 0;	// Set as output
-
+	
 	// /NMI (RA0)
 	WPU(W65_NMI) = 0;	// disable pull up
 	LAT(W65_NMI) = 1;		// disable NMI
@@ -269,16 +290,16 @@ void port_init(void)
 	LAT(W65_IRQ) = 1;		// IRQ=1
 
 	// RDY (RA5)
-	WPU(W65_RDY) = 0;	// disable pull up
-	TRIS(W65_RDY) = 1;	// Set as input
+	WPU(W65_RDY) = 0;		// disable pull up
+	TRIS(W65_RDY) = 1;		// Set as input
 
 	// DCK (RA1)
-	WPU(W65_DCK) = 0;	// disable pull up
-	LAT(W65_DCK) = 1;	// BANK REG CLK = 1
-	TRIS(W65_DCK) = 0;	// Set as output
+	WPU(W65_DCK) = 0;		// disable pull up
+	LAT(W65_DCK) = 1;		// BANK REG CLK = 1
+	TRIS(W65_DCK) = 0;		// Set as output
 
 	// SRAM_R/(/W) (RA4)
-	WPU(W65_RW) = 1;	// week pull up
+	WPU(W65_RW) = 1;		// week pull up
 	LAT(W65_RW) = 1;		// SRAM R/(/W) disactive
 	TRIS(W65_RW) = 0;		// Set as output
 
@@ -334,7 +355,6 @@ void uart_init(void)
 	rx_wp = 0;
 	rx_rp = 0;
 	rx_cnt = 0;
-	U3RXIE = 1;          // Receiver interrupt enable
 }
 
 void clk_init(void)
@@ -367,24 +387,20 @@ void write_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 	ab.w = addr;
 	i = 0;
 
+	TRIS(W65_ADBUS) = 0x00;		// Set as output
 	if (cpu_flg) {
 		// W65C816 native mode
 		while( i < len ) {
 		    LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
-
-	        LAT(W65_RW) = 0;			// activate /WE
-			TRIS(W65_ADBUS) = 0x00;		// Set as output
 			LAT(W65_DCK) = 0;			// bank addres data setup
 		    LAT(W65_ADBUS) = ab.hl;		// set bank address to data bas
-			LAT(W65_DCK) = 1;			// assert bank address
-
-			LAT(W65_ADBUS) = ((uint8_t*)buf)[i];
-	        LAT(W65_RW) = 1;			// deactivate /WE
-			TRIS(W65_ADBUS) = 0xff;		// Set as input
-
-			i++;
 			ab.w++;
+			LAT(W65_DCK) = 1;			// assert bank address
+			LAT(W65_RW) = 0;			// activate /WE
+			LAT(W65_ADBUS) = ((uint8_t*)buf)[i];
+			i++;
+	        LAT(W65_RW) = 1;			// deactivate /WE
 		}
 	}
 	else {
@@ -392,42 +408,38 @@ void write_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 		while( i < len ) {
 		    LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
-
 	        LAT(W65_RW) = 0;					// activate /WE
 			TRIS(W65_ADBUS) = 0x00;		// Set as output
 	        LAT(W65_ADBUS) = ((uint8_t*)buf)[i];
-	        LAT(W65_RW) = 1;					// deactivate /WE
-			TRIS(W65_ADBUS) = 0xff;		// Set as input
-
 			i++;
+			LAT(W65_RW) = 1;					// deactivate /WE
 			ab.w++;
 	    }
 	}
+	TRIS(W65_ADBUS) = 0xff;		// Set as input
 }
 
 void read_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 {
     union address_bus_u ab;
-    unsigned int i;
+    unsigned int i, j;
 
 	ab.w = addr;
-	i = 0;
+	i = j = 0;
 
 	if (cpu_flg) {
 		// W65C816 native mode
 		while( i < len ) {
 			LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
-
 			LAT(W65_DCK) = 0;						// Set Bank register
 			TRIS(W65_ADBUS) = 0x00;					// Set as output
 		    LAT(W65_ADBUS) = ab.hl;
+			j = i++;
 			LAT(W65_DCK) = 1;
 			TRIS(W65_ADBUS) = 0xFF;					// Set as input
-
 			ab.w++;									// Ensure bus data setup time from HiZ to valid data
-			((uint8_t*)buf)[i] = PORT(W65_ADBUS);			// read data
-			i++;
+			((uint8_t*)buf)[j] = PORT(W65_ADBUS);	// read data
 	    }
 	}
 	else {
@@ -435,33 +447,11 @@ void read_sram(uint32_t addr, uint8_t *buf, unsigned int len)
 		while( i < len ) {
 			LAT(W65_ADR_L) = ab.ll;
 			LAT(W65_ADR_H) = ab.lh;
-
 			ab.w++;									// Ensure bus data setup time from HiZ to valid data
-			((uint8_t*)buf)[i] = PORT(W65_ADBUS);	// read data
-			i++;
+			j = i++;
+			((uint8_t*)buf)[j] = PORT(W65_ADBUS);	// read data
 	    }
 	}
-}
-
-void start_cpu(void) {
-
-	bus_release_req();
-
-	CLCSELECT = 0;			// CLC1 select
-	G2POL = 0;				// /BE = 0 rising CLK edge
-	LAT(W65_RESET) = 0;		// cpu reset
-
-    __delay_ms(100);
-	
-	G2POL = 1;				// /BE = 1 rising CLK edge
-
-	CLCSELECT = 7;			// CLC8 select
-	G3POL = 1;				//
-	G3POL = 0;				// reset CLC8OUT = 0; release CLC2 reset
-
-	LAT(W65_RESET) = 1;		// cpu release reset
-
-	irq_flg = 0;
 }
 
 void timer_off(void) {

@@ -103,7 +103,7 @@ void clc_init()
 	CLCnGLS2 = 0x20;	// CLC8OUT -> lcxg3(DFF R)
     CLCnGLS3 = 0x00;	// 0 -> lcxg4(DFF S)
 
-    CLCnPOL = 0x80;		// POL=1: CLC2OUT = not DFF Q
+    CLCnPOL = 0x80;		// POL=1: CLC2OUT = DFF !Q
     CLCnCON = 0x84;		// 1-Input D Flip-Flop with S and R
 
 	//========== CLC3 : 1:shift /CLC2OUT  ==========
@@ -256,10 +256,8 @@ void setup_sd(void) {
     }
 }
 
-void start_W65(void)
+void setup_ivt(void)
 {
-	bus_release_req();
-
 	// Unlock IVT
 	IVTLOCK = 0x55;
 	IVTLOCK = 0xAA;
@@ -272,13 +270,6 @@ void start_W65(void)
 	IVTLOCK = 0x55;
 	IVTLOCK = 0xAA;
 	IVTLOCKbits.IVTLOCKED = 0x01;
-
-	// release /BE
-	CLCSELECT = 0;		// CLC1 select
-	G2POL = 1;			// /BE = 1 rising CLK edge
-
-	// W65 start
-	LAT(W65_RESET) = 1;	// Release reset
 }
 
 static void bus_hold_req(void) {
@@ -288,7 +279,7 @@ static void bus_hold_req(void) {
 
 	LAT(W65_RW) = 1;			// SRAM READ mode
 	TRIS(W65_RW) = 0;			// output
-	TRIS(W65_DCK) = 0;		// Set as output
+//	TRIS(W65_DCK) = 0;		// Set as output
 }
 
 static void bus_release_req(void) {
@@ -296,7 +287,7 @@ static void bus_release_req(void) {
 	TRIS(W65_ADR_L) = 0xff;	// A7-A0
 	TRIS(W65_ADR_H) = 0xff;	// A8-A15
 
-	TRIS(W65_DCK) = 1;		// Set as input
+//	TRIS(W65_DCK) = 1;		// Set as input
 	TRIS(W65_RW) = 1;			// input
 }
 
