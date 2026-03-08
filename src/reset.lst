@@ -1,8 +1,8 @@
-  Wed Mar  4 2026 22:35                                                                                                    Page 1
+  Mon Mar  9 2026  5:03                                                                                                    Page 1
 
 
                                                ***************************************
-                                               **      WDC 65C02 Macro Assembler    **
+                                               **      WDC 65C816 Macro Assembler   **
                                                **                                   **
                                                **     Version 3.49.1- Feb  6 2006    **
                                                ***************************************
@@ -55,40 +55,37 @@
     46                        	longi	off
     47                        	
     48                        RESET:
-    49 00:FFE7: A9 00        	lda	#$00
-    50 00:FFE9: A2 FF        	ldx	#$ff
-    51 00:FFEB: 9A           	txs			; set SP (W65C02 OPECODE)
-    52 00:FFEC: 1B           	tas			; set SP (W65C816 OPECODE)
-  Wed Mar  4 2026 22:35                                                                                                    Page 2
+    49 00:FFE7: 18           	clc			; set native mode
+    50 00:FFE8: FB           	xce			; if cpu=W65C02 then xce = nop operation
+    51                        
+    52 00:FFE9: A9 00        	lda	#$00
+  Mon Mar  9 2026  5:03                                                                                                    Page 2
 
 
-    53 00:FFED: EA           	nop
-    54 00:FFEE: EA           	nop
-    55 00:FFEF: BA           	tsx			; SP -> X (W65C02 OPECODE)
-    56 00:FFF0: E8           	inx
-    57 00:FFF1: 8E F9 FF     	stx	cpu_type	; 0:W65C02 1:W65C816
-    58                        
-    59 00:FFF4: 18           	clc			; set native mode
-    60 00:FFF5: FB           	xce			; if cpu=W65C02 then xce = nop operation
-    61                        ;	nop
-    62                        ;	nop
-    63                        
-    64                        NMIBRK:
-    65                        IRQBRK:
-    66                        ;	stp	; stop CPU
-    67 00:FFF6: CB           	wai	; stop CPU
-    68 00:FFF7: 80 FE        aaa:	bra	aaa
-    69                        
-    70 00:FFF9: FF           cpu_type:	db	$FF
-    71                        
-    72 00:FFFA: F6 FF        	FDB	NMIBRK		; NMI
-    73                        
-    74 00:FFFC: E7 FF        	FDB	RESET		; RESET
-    75                        
-    76 00:FFFE: F6 FF        	FDB	IRQBRK		; IRQ/BRK
-    77                        
-    78                        	END
+    53 00:FFEB: A2 FF        	ldx	#$ff
+    54 00:FFED: 9A           	txs			; set SP (W65C02 OPECODE)
+    55 00:FFEE: 1B           	tas			; set SP (W65C816 OPECODE)
+    56 00:FFEF: EA           	nop
+    57 00:FFF0: EA           	nop
+    58 00:FFF1: BA           	tsx			; SP -> X (W65C02 OPECODE)
+    59 00:FFF2: E8           	inx
+    60 00:FFF3: 8E F9 FF     	stx	cpu_type	; 0:W65C02 1:W65C816
+    61                        
+    62                        NMIBRK:
+    63                        IRQBRK:
+    64 00:FFF6: CB           	wai			; wait CPU
+    65 00:FFF7: 80 FE        aaa:	bra	aaa
+    66                        
+    67 00:FFF9: FF           cpu_type:	db	$FF
+    68                        
+    69 00:FFFA: F6 FF        	FDB	NMIBRK		; NMI
+    70                        
+    71 00:FFFC: E7 FF        	FDB	RESET		; RESET
+    72                        
+    73 00:FFFE: F6 FF        	FDB	IRQBRK		; IRQ/BRK
+    74                        
+    75                        	END
 
 
-      Lines assembled: 78
+      Lines assembled: 75
       Errors: 0

@@ -46,6 +46,9 @@
 	longi	off
 	
 RESET:
+	clc			; set native mode
+	xce			; if cpu=W65C02 then xce = nop operation
+
 	lda	#$00
 	ldx	#$ff
 	txs			; set SP (W65C02 OPECODE)
@@ -56,15 +59,9 @@ RESET:
 	inx
 	stx	cpu_type	; 0:W65C02 1:W65C816
 
-	clc			; set native mode
-	xce			; if cpu=W65C02 then xce = nop operation
-;	nop
-;	nop
-
 NMIBRK:
 IRQBRK:
-;	stp	; stop CPU
-	wai	; stop CPU
+	wai			; wait CPU
 aaa:	bra	aaa
 
 cpu_type:	db	$FF
