@@ -58,12 +58,14 @@ RESET:
 
 	clc			; set native mode
 	xce			; if cpu=W65C02 then xce = nop operation
-	nop
-	nop
+;	nop
+;	nop
 
 NMIBRK:
 IRQBRK:
-	stp	; stop CPU
+;	stp	; stop CPU
+	wai	; stop CPU
+aaa:	bra	aaa
 
 cpu_type:	db	$FF
 

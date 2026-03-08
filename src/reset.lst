@@ -1,8 +1,8 @@
-  Tue Feb 18 2025 22:10                                                                                                    Page 1
+  Wed Mar  4 2026 22:35                                                                                                    Page 1
 
 
                                                ***************************************
-                                               **      WDC 65C816 Macro Assembler   **
+                                               **      WDC 65C02 Macro Assembler    **
                                                **                                   **
                                                **     Version 3.49.1- Feb  6 2006    **
                                                ***************************************
@@ -59,7 +59,7 @@
     50 00:FFE9: A2 FF        	ldx	#$ff
     51 00:FFEB: 9A           	txs			; set SP (W65C02 OPECODE)
     52 00:FFEC: 1B           	tas			; set SP (W65C816 OPECODE)
-  Tue Feb 18 2025 22:10                                                                                                    Page 2
+  Wed Mar  4 2026 22:35                                                                                                    Page 2
 
 
     53 00:FFED: EA           	nop
@@ -70,23 +70,25 @@
     58                        
     59 00:FFF4: 18           	clc			; set native mode
     60 00:FFF5: FB           	xce			; if cpu=W65C02 then xce = nop operation
-    61 00:FFF6: EA           	nop
-    62 00:FFF7: EA           	nop
+    61                        ;	nop
+    62                        ;	nop
     63                        
     64                        NMIBRK:
     65                        IRQBRK:
-    66 00:FFF8: DB           	stp	; stop CPU
-    67                        
-    68 00:FFF9: FF           cpu_type:	db	$FF
+    66                        ;	stp	; stop CPU
+    67 00:FFF6: CB           	wai	; stop CPU
+    68 00:FFF7: 80 FE        aaa:	bra	aaa
     69                        
-    70 00:FFFA: F8 FF        	FDB	NMIBRK		; NMI
+    70 00:FFF9: FF           cpu_type:	db	$FF
     71                        
-    72 00:FFFC: E7 FF        	FDB	RESET		; RESET
+    72 00:FFFA: F6 FF        	FDB	NMIBRK		; NMI
     73                        
-    74 00:FFFE: F8 FF        	FDB	IRQBRK		; IRQ/BRK
+    74 00:FFFC: E7 FF        	FDB	RESET		; RESET
     75                        
-    76                        	END
+    76 00:FFFE: F6 FF        	FDB	IRQBRK		; IRQ/BRK
+    77                        
+    78                        	END
 
 
-      Lines assembled: 76
+      Lines assembled: 78
       Errors: 0
