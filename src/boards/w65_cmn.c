@@ -204,7 +204,7 @@ void start_cpu(void) {
 							// active CPU BUS
 
 	LAT(W65_RESET) = 0;		// cpu reset
-    __delay_us(100);
+    __delay_ms(1);
 
 	LAT(W65_RESET) = 1;		// cpu release reset
 
@@ -234,7 +234,7 @@ uint8_t reset_cpu(void)
 		}
 
 		start_cpu();
-		__delay_us(500);
+		__delay_ms(10);
 
 		CLCSELECT = 0;			// CLC1 select
 		G2POL = 0;				// /BE = 0 rising CLK edge
@@ -250,7 +250,7 @@ uint8_t reset_cpu(void)
 		}
 		printf("Unknown CPU type(%02x)\r\n", tmp_buf[0][0]);
 		printf("RESET CPU...\r\n");
-		__delay_ms(500);
+		__delay_ms(300);
 	}
 }
 
@@ -317,7 +317,6 @@ void port_init(void)
 	TRIS(W65_ADR_H) = 0x00;	// Set as output
 
 	// Data bus D7-D0 pin
-	WPU(W65_ADBUS) = 0xff;	// Week pull up
 	LAT(W65_ADBUS) = 0x00;	// PLD FF init
 	TRIS(W65_ADBUS) = 0x00;	// Set as output
 	
